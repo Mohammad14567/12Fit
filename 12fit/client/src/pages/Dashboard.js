@@ -1,95 +1,99 @@
-import { useEffect, useState, useCallback } from "react";
-import { getProgress, addProgress } from "../services/progressService";
+import { useEffect, useState } from "react";
+import { getUsersWithPlans, deleteUser } from "../services/userService";
 
 function Dashboard() {
-  const user = JSON.parse(localStorage.getItem("user"))|| {
-  name: "Guest User",
-  email: "guest@example.com",
-  role: "user",
-};
-
   const token = localStorage.getItem("token");
+  const [users, setUsers] = useState([]);
 
-  const [progressData, setProgressData] = useState([]);
-  const [dayName, setDayName] = useState("");
-  const [weight, setWeight] = useState("");
-
-  const loadProgress = useCallback(async () => {
+  const loadUsers = async () => {
     try {
-      const res = await getProgress(token);
-      setProgressData(res.data);
-    } catch (error) {
-      console.log(error);
-    }
-  }, [token]);
-
-  useEffect(() => {
-    loadProgress();
-  }, [loadProgress]);
-
-  const handleAddProgress = async (e) => {
-    e.preventDefault();
-
-    try {
-      await addProgress({ day_name: dayName, weight }, token);
-      setDayName("");
-      setWeight("");
-      loadProgress();
+      const res = await getUsersWithPlans(token);
+      setUsers(res.data);
     } catch (error) {
       console.log(error);
     }
   };
 
+  useEffect(() => {
+    if (token) {
+      loadUsers();
+    }
+  }, [token]);
+
+  const handleDelete = async (userId) => {
+    if (window.confirm("Are you sure you want to delete this user account?")) {
+      try {
+        await deleteUser(userId, token);
+        loadUsers(); // Refresh the list
+      } catch (error) {
+        alert("Failed to delete user: " + (error.response?.data?.message || "Something went wrong"));
+      }
+    }
+  };
+
   return (
     <div className="container py-5">
-      <div className="card shadow border-0 rounded-4 p-4 mb-4">
-        <h2 className="fw-bold">Welcome, {user?.name}</h2>
-        <p className="mb-0">Track your fitness progress here.</p>
-      </div>
-
-      <div className="card shadow border-0 rounded-4 p-4 mb-4">
-        <h4 className="mb-3">Add Progress</h4>
-        <form onSubmit={handleAddProgress}>
-          <div className="mb-3">
-            <label className="form-label">Day</label>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="e.g. Monday"
-              value={dayName}
-              onChange={(e) => setDayName(e.target.value)}
-            />
-          </div>
-
-          <div className="mb-3">
-            <label className="form-label">Weight</label>
-            <input
-              type="number"
-              className="form-control"
-              placeholder="e.g. 75"
-              value={weight}
-              onChange={(e) => setWeight(e.target.value)}
-            />
-          </div>
-
-          <button className="btn btn-primary">Save Progress</button>
-        </form>
-      </div>
-
-      <div className="card shadow border-0 rounded-4 p-4">
-        <h4 className="mb-3">Progress Data</h4>
-
-        {progressData.length === 0 ? (
-          <p className="text-muted mb-0">No progress data yet.</p>
-        ) : (
-          <ul className="list-group">
-            {progressData.map((item, index) => (
-              <li key={index} className="list-group-item">
-                {item.day_name} - {item.weight} kg
-              </li>
-            ))}
-          </ul>
-        )}
+      <div
+        style={{
+          background: 'rgba(255, 255, 255, 0.05)',
+          borderRadius: '24px',
+          padding: '40px',
+          backdropFilter: 'blur(18px)',
+          border: '1px solid rgba(255, 255, 255, 0.15)',
+          boxShadow: '0 20px 50px rgba(0, 0, 0, 0.35)',
+          minHeight: '600px',
+        }}
+      >
+        <div className="row g-4">
+          {users.map((user) => (
+            <div className="col-md-6 col-lg-4" key={user.id}>
+              <div className="card shadow border-0 rounded-4 p-4 h-100">
+                <h5 className="mb-3">{user.name}</h5>
+                <p><strong>Email:</strong> {user.email}</p>
+                <p><strong>Role:</strong> {user.role}</p>
+                {user.workoutPlan && (
+                  <div className="mb-2">
+                    <strong>Workout Goal:</strong> {user.workoutGoal || 'N/A'}<br />
+                    <strong>Workout Level:</strong> {user.workoutLevel || 'N/A'}<br />
+                    <strong>Workout Plan:</strong>
+                    <ul className="mt-1">
+                      {user.workoutPlan.map((item, index) => (
+                        <li key={index} className="small">{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {user.dietPlan && (
+                  <div className="mb-2">
+                    <strong>Diet Goal:</strong> {user.dietGoal || 'N/A'}<br />
+                    <strong>Diet Plan:</strong>
+                    <ul className="mt-1">
+                      {user.dietPlan.map((item, index) => (
+                        <li key={index} className="small">{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {user.progress && user.progress.length > 0 && (
+                  <div className="mb-3">
+                    <strong>Progress:</strong>
+                    <ul className="mt-1">
+                      {user.progress.map((item, index) => (
+                        <li key={index} className="small">{item.day_name} - {item.weight} kg</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                <button
+                  className="btn btn-danger btn-sm mt-auto"
+                  onClick={() => handleDelete(user.id)}
+                >
+                  Remove Account
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

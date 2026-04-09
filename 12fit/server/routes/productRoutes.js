@@ -8,7 +8,7 @@ const {
   createProduct,
 } = require("../controllers/productController");
 
-router.get("/",  getProducts);
-router.post("/",  createProduct);
+router.get("/", authMiddleware, getProducts);
+router.post("/", authMiddleware, adminMiddleware, createProduct);
 
 module.exports = router;

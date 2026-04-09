@@ -13,7 +13,16 @@ const progressRoutes = require("./routes/progressRoutes");
 const app = express();
 
 
-app.use(cors());
+
+
+app.use(cors({
+    origin: [
+      "http://localhost:3000",
+      "https://fit12-pro.netlify.app",
+    ],
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 app.get("/", (req, res) => {
@@ -26,7 +35,7 @@ app.use("/diet", dietRoutes);
 app.use("/products", productRoutes);
 app.use("/progress", progressRoutes);
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8080;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

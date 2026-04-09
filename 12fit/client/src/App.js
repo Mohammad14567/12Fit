@@ -25,30 +25,55 @@ function App() {
 
             <Route
               path="/login"
-              element={ <Login /> } />
+              element={
+                <PublicOnlyRoute>
+                  <Login />
+                </PublicOnlyRoute>
+              }
+            />
 
             <Route
               path="/register"
-              element={ <Register /> }/>
+              element={
+                <PublicOnlyRoute>
+                  <Register />
+                </PublicOnlyRoute>
+              }
+            />
 
             <Route
               path="/dashboard"
               element={
-                  <Dashboard /> } />
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
 
             <Route
               path="/workout"
-              element={<Workout /> } />
+              element={
+                <ProtectedRoute>
+                  <Workout />
+                </ProtectedRoute>
+              }
+            />
 
             <Route
               path="/diet"
               element={
-                  <Diet /> } />
+                <ProtectedRoute>
+                  <Diet />
+                </ProtectedRoute>
+              }
+            />
 
             <Route
               path="/products"
               element={
+                <ProtectedRoute>
                   <Products />
+                </ProtectedRoute>
               }
             />
           </Routes>

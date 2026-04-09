@@ -7,7 +7,7 @@ const {
   addProgress,
 } = require("../controllers/progressController");
 
-router.get("/",  getProgress);
-router.post("/",  addProgress);
+router.get("/", authMiddleware, getProgress);
+router.post("/", authMiddleware, addProgress);
 
 module.exports = router;

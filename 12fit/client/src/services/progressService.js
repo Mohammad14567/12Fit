@@ -8,8 +8,6 @@ export const getProgress = (token) => {
 
 export const addProgress = (data, token) => {
   return api.post("/progress", data, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+  
   });
 };

@@ -2,7 +2,12 @@ import { useEffect, useState, useCallback } from "react";
 import { getProgress, addProgress } from "../services/progressService";
 
 function Dashboard() {
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem("user"))|| {
+  name: "Guest User",
+  email: "guest@example.com",
+  role: "user",
+};
+
   const token = localStorage.getItem("token");
 
   const [progressData, setProgressData] = useState([]);

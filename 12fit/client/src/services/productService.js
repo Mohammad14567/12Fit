@@ -6,5 +6,6 @@ export const getProducts = () => {
 
 export const createProduct = (data, token) => {
   return api.post("/products", data, {
+   
   });
 };

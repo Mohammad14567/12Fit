@@ -1,6 +1,4 @@
 import { useState } from "react";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 import { generateWorkout } from "../services/workoutService";
 
 function Workout() {

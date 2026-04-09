@@ -7,7 +7,7 @@ const {
   createDietPlan,
 } = require("../controllers/dietController");
 
-router.get("/", authMiddleware, getDietPlans);
-router.post("/", authMiddleware, createDietPlan);
+router.get("/",  getDietPlans);
+router.post("/",  createDietPlan);
 
 module.exports = router;

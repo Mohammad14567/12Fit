@@ -12,7 +12,7 @@ import {
 } from "recharts";
 
 function DashboardContent() {
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem("user")) || name:"Guest";
   const token = localStorage.getItem("token");
 
   const [progressData, setProgressData] = useState([]);

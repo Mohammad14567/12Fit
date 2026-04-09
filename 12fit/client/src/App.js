@@ -22,60 +22,12 @@ function App() {
         <div className="main-content">
           <Routes>
             <Route path="/" element={<Home />} />
-
-            <Route
-              path="/login"
-              element={
-                <PublicOnlyRoute>
-                  <Login />
-                </PublicOnlyRoute>
-              }
-            />
-
-            <Route
-              path="/register"
-              element={
-                <PublicOnlyRoute>
-                  <Register />
-                </PublicOnlyRoute>
-              }
-            />
-
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              }
-            />
-
-            <Route
-              path="/workout"
-              element={
-                <ProtectedRoute>
-                  <Workout />
-                </ProtectedRoute>
-              }
-            />
-
-            <Route
-              path="/diet"
-              element={
-                <ProtectedRoute>
-                  <Diet />
-                </ProtectedRoute>
-              }
-            />
-
-            <Route
-              path="/products"
-              element={
-                <ProtectedRoute>
-                  <Products />
-                </ProtectedRoute>
-              }
-            />
+            <Route path="/login"element={<Login />}/>
+            <Route path="/register"element={<Register />}/>
+            <Route path="/dashboard"element={<Dashboard />}/>
+            <Route path="/workout"element={<Workout /> }/>
+            <Route path="/diet"element={ <Diet />}/>
+            <Route path="/products"element={<Products /> }/>
           </Routes>
         </div>
 

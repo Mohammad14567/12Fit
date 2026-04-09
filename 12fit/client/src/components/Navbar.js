@@ -1,77 +1,51 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import logo from "../assets/images/logo.png";
 
 function Navbar() {
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("user"));
+  const location = useLocation();
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    navigate("/login");
-  };
+  const isActive = (path) => (location.pathname === path ? "active-link" : "");
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark py-3 shadow-sm">
+    <nav className="navbar navbar-expand-lg shadow-sm py-3 sticky-top custom-navbar">
       <div className="container">
-        <Link className="navbar-brand fw-bold" to="/">
-          12Fit
+        <Link className="navbar-brand d-flex align-items-center" to="/">
+          <img src={logo} alt="logo" className="navbar-logo" />
+          <span className="fw-bold text-white">12Fit</span>
         </Link>
 
-        <div className="collapse navbar-collapse show">
+        <button
+          className="navbar-toggler border-0 shadow-none"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbar"
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
+
+        <div className="collapse navbar-collapse" id="navbar">
           <ul className="navbar-nav me-auto ms-lg-4">
             <li className="nav-item">
-              <Link className="nav-link" to="/">
-                Home
-              </Link>
+              <Link className={`nav-link ${isActive("/")}`} to="/">Home</Link>
             </li>
-
             <li className="nav-item">
-              <Link className="nav-link" to="/diet">
-                Nutrition
-              </Link>
+              <Link className={`nav-link ${isActive("/dashboard")}`} to="/dashboard">Dashboard</Link>
             </li>
-
             <li className="nav-item">
-              <Link className="nav-link" to="/workout">
-                Workouts
-              </Link>
+              <Link className={`nav-link ${isActive("/workout")}`} to="/workout">Workout</Link>
             </li>
-
             <li className="nav-item">
-              <Link className="nav-link" to="/products">
-                Products
-              </Link>
+              <Link className={`nav-link ${isActive("/diet")}`} to="/diet">Diet</Link>
             </li>
-
-            {user && (
-              <li className="nav-item">
-                <Link className="nav-link" to="/dashboard">
-                  Dashboard
-                </Link>
-              </li>
-            )}
+            <li className="nav-item">
+              <Link className={`nav-link ${isActive("/products")}`} to="/products">Products</Link>
+            </li>
           </ul>
 
-          <div className="d-flex align-items-center">
-            {!user ? (
-              <>
-                <Link className="btn btn-outline-light me-2" to="/login">
-                  Login
-                </Link>
-                <Link className="btn btn-primary" to="/register">
-                  Register
-                </Link>
-              </>
-            ) : (
-              <>
-                <span className="text-white me-3">
-                  {user.name} ({user.role})
-                </span>
-                <button className="btn btn-danger" onClick={handleLogout}>
-                  Logout
-                </button>
-              </>
-            )}
+          <div className="d-flex gap-2">
+            <Link className="btn btn-outline-light" to="/login">Login</Link>
+            <Link className="btn btn-primary" to="/register">Register</Link>
           </div>
         </div>
       </div>

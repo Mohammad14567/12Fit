@@ -1,0 +1,51 @@
+const db = require("../config/db");
+
+const getUsersWithPlans = (req, res) => {
+  const sql = "SELECT id, name, email, role FROM users";
+  db.query(sql, (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: "Database error" });
+    }
+
+    res.json(results);
+  });
+};
+
+const deleteUser = (req, res) => {
+  const userId = req.params.id;
+  const sql = "DELETE FROM users WHERE id = ?";
+
+  db.query(sql, [userId], (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: "Database error" });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(204).send();
+  });
+};
+
+const countUsers = (req, res) => {
+  const sql = "SELECT COUNT(*) AS total FROM users";
+  db.query(sql, (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: "Database error" });
+    }
+
+    res.json({ total: results[0].total });
+  });
+};
+
+const getOnlineUsers = (req, res) => {
+  const count = req.app.get("onlineUsers") || 0;
+  res.json({ online: count });
+};
+
+module.exports = {
+  getUsersWithPlans,
+  deleteUser,
+  countUsers,
+  getOnlineUsers,
+};

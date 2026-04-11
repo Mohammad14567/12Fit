@@ -7,6 +7,7 @@ import Dashboard from "./pages/Dashboard";
 import Workout from "./pages/Workout";
 import Diet from "./pages/Diet";
 import Products from "./pages/Products";
+import Progress from "./pages/Progress";
 
 import PublicOnlyRoute from "./components/PublicOnlyRoute";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -28,6 +29,7 @@ function App() {
             <Route path="/workout"element={<Workout /> }/>
             <Route path="/diet"element={ <Diet />}/>
             <Route path="/products"element={<Products /> }/>
+            <Route path="/progress"element={<Progress /> }/>
           </Routes>
         </div>
 

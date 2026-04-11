@@ -348,11 +348,6 @@ function Dashboard() {
         )}
       </div>
 
-      <div className="text-center mt-5 mb-4">
-        <h2 className="display-5 fw-bold text-white admin-dashboard-title">Plans Dashboard</h2>
-        <p className="lead text-muted">Manage workout and diet plans</p>
-      </div>
-
     </div>
   );
 }

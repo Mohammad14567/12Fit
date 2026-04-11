@@ -41,6 +41,9 @@ function Navbar() {
             <li className="nav-item">
               <Link className={`nav-link ${isActive("/products")}`} to="/products">Products</Link>
             </li>
+            <li className="nav-item">
+              <Link className={`nav-link ${isActive("/progress")}`} to="/progress">Progress</Link>
+            </li>
           </ul>
 
           <div className="d-flex gap-2">

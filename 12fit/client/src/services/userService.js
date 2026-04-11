@@ -43,3 +43,11 @@ export const checkApiStatus = () => {
 export const checkDbStatus = () => {
   return api.get("/users/db-status");
 };
+
+export const getUptime = () => {
+  return api.get("/health/uptime");
+};
+
+export const getDbPing = () => {
+  return api.get("/health/db-ping");
+};

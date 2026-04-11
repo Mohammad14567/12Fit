@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
-import { getUsersWithPlans, deleteUser, getRegisteredUsersCount, getOnlineUsersCount, checkApiStatus, updateUserRole, checkDbStatus } from "../services/userService";
+import { getUsersWithPlans, deleteUser, getRegisteredUsersCount, getOnlineUsersCount, checkApiStatus, updateUserRole, checkDbStatus, getUptime, getDbPing } from "../services/userService";
 
 function Dashboard() {
   const token = localStorage.getItem("token");
@@ -13,6 +13,8 @@ function Dashboard() {
   const [apiStatusType, setApiStatusType] = useState("");
   const [dbStatus, setDbStatus] = useState(null);
   const [dbStatusType, setDbStatusType] = useState("");
+  const [responseTime, setResponseTime] = useState(null);
+  const [responseTimeType, setResponseTimeType] = useState("");
   const [roleUpdateTarget, setRoleUpdateTarget] = useState(null);
   const [roleUpdateStatus, setRoleUpdateStatus] = useState(null);
   const [roleUpdating, setRoleUpdating] = useState(false);
@@ -75,6 +77,34 @@ function Dashboard() {
       console.error(error);
       setDbStatus("Database is not working: connection failed.");
       setDbStatusType("danger");
+    }
+  };
+
+  const handleTestResponseTime = async () => {
+    setResponseTime("Testing response time...");
+    setResponseTimeType("info");
+
+    const startTime = Date.now();
+
+    try {
+      // Test API response time
+      await checkApiStatus();
+      const apiResponseTime = Date.now() - startTime;
+
+      // Get uptime
+      const uptimeRes = await getUptime();
+      const uptime = uptimeRes.data.uptime;
+
+      // Get DB ping
+      const dbPingRes = await getDbPing();
+      const dbPingTime = dbPingRes.data.dbPingTime;
+
+      setResponseTime(`1) Response Time: ${apiResponseTime} ms\n2) Uptime: ${uptime} seconds\n3) DB Ping Time: ${dbPingTime} ms`);
+      setResponseTimeType("success");
+    } catch (error) {
+      const apiResponseTime = Date.now() - startTime;
+      setResponseTime(`Response failed after ${apiResponseTime} ms. Could not fetch uptime or DB ping.`);
+      setResponseTimeType("danger");
     }
   };
 
@@ -155,7 +185,7 @@ function Dashboard() {
       </div>
 
       <div className="row g-4 mb-4">
-        <div className="col-md-6 text-center">
+        <div className="col-md-4 text-center">
           <button
             type="button"
             className="btn btn-primary rounded-pill px-4 py-3"
@@ -164,7 +194,16 @@ function Dashboard() {
             Check API Status
           </button>
         </div>
-        <div className="col-md-6 text-center">
+        <div className="col-md-4 text-center">
+          <button
+            type="button"
+            className="btn btn-primary rounded-pill px-4 py-3"
+            onClick={handleTestResponseTime}
+          >
+            System Health
+          </button>
+        </div>
+        <div className="col-md-4 text-center">
           <button
             type="button"
             className="btn btn-primary rounded-pill px-4 py-3"
@@ -184,6 +223,12 @@ function Dashboard() {
       {dbStatus && (
         <div className={`alert alert-${dbStatusType} rounded-4 py-3 mb-4`} role="alert">
           {dbStatus}
+        </div>
+      )}
+
+      {responseTime && (
+        <div className={`alert alert-${responseTimeType} rounded-4 py-3 mb-4`} role="alert">
+          {responseTime}
         </div>
       )}
 

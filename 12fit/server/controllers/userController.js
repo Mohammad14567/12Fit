@@ -75,6 +75,24 @@ const checkDbStatus = (req, res) => {
   });
 };
 
+const getUptime = (req, res) => {
+  const uptime = process.uptime(); // in seconds
+  res.json({ uptime: Math.floor(uptime) }); // in seconds
+};
+
+const getDbPing = (req, res) => {
+  const start = Date.now();
+  const sql = "SELECT 1";
+  db.query(sql, (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: "Database ping failed" });
+    }
+    const end = Date.now();
+    const pingTime = end - start;
+    res.json({ dbPingTime: pingTime });
+  });
+};
+
 module.exports = {
   getUsersWithPlans,
   deleteUser,
@@ -82,4 +100,6 @@ module.exports = {
   getOnlineUsers,
   updateUserRole,
   checkDbStatus,
+  getUptime,
+  getDbPing,
 };

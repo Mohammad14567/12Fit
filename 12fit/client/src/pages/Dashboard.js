@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
-import { getUsersWithPlans, deleteUser, getRegisteredUsersCount, getOnlineUsersCount, checkApiStatus } from "../services/userService";
+import { getUsersWithPlans, deleteUser, getRegisteredUsersCount, getOnlineUsersCount, checkApiStatus, updateUserRole } from "../services/userService";
 
 function Dashboard() {
   const token = localStorage.getItem("token");
@@ -11,6 +11,9 @@ function Dashboard() {
   const [currentPage, setCurrentPage] = useState(1);
   const [apiStatus, setApiStatus] = useState(null);
   const [apiStatusType, setApiStatusType] = useState("");
+  const [roleUpdateTarget, setRoleUpdateTarget] = useState(null);
+  const [roleUpdateStatus, setRoleUpdateStatus] = useState(null);
+  const [roleUpdating, setRoleUpdating] = useState(false);
   const socketRef = useRef(null);
 
   const cardsPerPage = 3;
@@ -55,6 +58,28 @@ function Dashboard() {
       console.error(error);
       setApiStatus("API is not working: unable to connect.");
       setApiStatusType("danger");
+    }
+  };
+
+  const handleShowRoleOptions = (userId) => {
+    setRoleUpdateStatus(null);
+    setRoleUpdateTarget(roleUpdateTarget === userId ? null : userId);
+  };
+
+  const handleUpdateUserRole = async (userId) => {
+    setRoleUpdating(true);
+    setRoleUpdateStatus("Updating role...");
+
+    try {
+      await updateUserRole(userId, "Admin", token);
+      setRoleUpdateStatus("User has been promoted to Admin.");
+      setRoleUpdateTarget(null);
+      loadUsers();
+    } catch (error) {
+      console.error(error);
+      setRoleUpdateStatus("Failed to update user role.");
+    } finally {
+      setRoleUpdating(false);
     }
   };
 
@@ -185,11 +210,34 @@ function Dashboard() {
                   </div>
                 )}
                 <button
-                  className="btn btn-danger btn-sm mt-auto"
+                  className="btn btn-danger btn-sm"
                   onClick={() => handleDelete(user.id)}
                 >
                   Remove Account
                 </button>
+                <button
+                  className="btn btn-outline-light btn-sm ms-2"
+                  onClick={() => handleShowRoleOptions(user.id)}
+                >
+                  Update User Role
+                </button>
+                {roleUpdateTarget === user.id && (
+                  <div className="mt-3 p-3 bg-white bg-opacity-10 rounded-4">
+                    <p className="mb-2 text-muted small">Select new role:</p>
+                    <button
+                      className="btn btn-primary btn-sm"
+                      onClick={() => handleUpdateUserRole(user.id)}
+                      disabled={roleUpdating}
+                    >
+                      {roleUpdating ? "Updating..." : "Admin"}
+                    </button>
+                    {roleUpdateStatus && (
+                      <div className={`alert alert-${roleUpdateStatus.includes("Failed") ? "danger" : "success"} rounded-4 mt-3 py-2 mb-0`} role="alert">
+                        {roleUpdateStatus}
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           ))}

@@ -43,9 +43,31 @@ const getOnlineUsers = (req, res) => {
   res.json({ online: count });
 };
 
+const updateUserRole = (req, res) => {
+  const userId = req.params.id;
+  const { role } = req.body;
+
+  if (!role) {
+    return res.status(400).json({ message: "Role is required" });
+  }
+
+  const sql = "UPDATE users SET role = ? WHERE id = ?";
+  db.query(sql, [role, userId], (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: "Database error" });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json({ message: "User role updated successfully" });
+  });
+};
+
 module.exports = {
   getUsersWithPlans,
   deleteUser,
   countUsers,
   getOnlineUsers,
+  updateUserRole,
 };

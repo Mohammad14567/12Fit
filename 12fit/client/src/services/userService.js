@@ -16,6 +16,18 @@ export const deleteUser = (userId, token) => {
   });
 };
 
+export const updateUserRole = (userId, role, token) => {
+  return api.patch(
+    `/users/${userId}`,
+    { role },
+    {
+      headers: {
+        Authorization: token ? `Bearer ${token}` : undefined,
+      },
+    }
+  );
+};
+
 export const getRegisteredUsersCount = () => {
   return api.get("/users/count");
 };

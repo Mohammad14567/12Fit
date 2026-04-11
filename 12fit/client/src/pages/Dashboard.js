@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
-import { getUsersWithPlans, deleteUser, getRegisteredUsersCount, getOnlineUsersCount, checkApiStatus, updateUserRole } from "../services/userService";
+import { getUsersWithPlans, deleteUser, getRegisteredUsersCount, getOnlineUsersCount, checkApiStatus, updateUserRole, checkDbStatus } from "../services/userService";
 
 function Dashboard() {
   const token = localStorage.getItem("token");
@@ -11,6 +11,8 @@ function Dashboard() {
   const [currentPage, setCurrentPage] = useState(1);
   const [apiStatus, setApiStatus] = useState(null);
   const [apiStatusType, setApiStatusType] = useState("");
+  const [dbStatus, setDbStatus] = useState(null);
+  const [dbStatusType, setDbStatusType] = useState("");
   const [roleUpdateTarget, setRoleUpdateTarget] = useState(null);
   const [roleUpdateStatus, setRoleUpdateStatus] = useState(null);
   const [roleUpdating, setRoleUpdating] = useState(false);
@@ -58,6 +60,21 @@ function Dashboard() {
       console.error(error);
       setApiStatus("API is not working: unable to connect.");
       setApiStatusType("danger");
+    }
+  };
+
+  const handleCheckDbStatus = async () => {
+    setDbStatus("Checking database status...");
+    setDbStatusType("info");
+
+    try {
+      const res = await checkDbStatus();
+      setDbStatus(res.data.status);
+      setDbStatusType("success");
+    } catch (error) {
+      console.error(error);
+      setDbStatus("Database is not working: connection failed.");
+      setDbStatusType("danger");
     }
   };
 
@@ -137,14 +154,25 @@ function Dashboard() {
         </div>
       </div>
 
-      <div className="mb-4">
-        <button
-          type="button"
-          className="btn btn-primary rounded-pill px-4 py-3"
-          onClick={handleCheckApiStatus}
-        >
-          Check API Status
-        </button>
+      <div className="row g-4 mb-4">
+        <div className="col-md-6 text-center">
+          <button
+            type="button"
+            className="btn btn-primary rounded-pill px-4 py-3"
+            onClick={handleCheckApiStatus}
+          >
+            Check API Status
+          </button>
+        </div>
+        <div className="col-md-6 text-center">
+          <button
+            type="button"
+            className="btn btn-primary rounded-pill px-4 py-3"
+            onClick={handleCheckDbStatus}
+          >
+            Check Database Status
+          </button>
+        </div>
       </div>
 
       {apiStatus && (
@@ -153,7 +181,12 @@ function Dashboard() {
         </div>
       )}
 
-      <h3 className="mb-4">Control Users Accounts</h3>
+      {dbStatus && (
+        <div className={`alert alert-${dbStatusType} rounded-4 py-3 mb-4`} role="alert">
+          {dbStatus}
+        </div>
+      )}
+
       <div
         style={{
           background: 'rgba(255, 255, 255, 0.05)',

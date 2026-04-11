@@ -39,3 +39,7 @@ export const getOnlineUsersCount = () => {
 export const checkApiStatus = () => {
   return api.get("/users/count");
 };
+
+export const checkDbStatus = () => {
+  return api.get("/users/db-status");
+};

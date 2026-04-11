@@ -64,10 +64,22 @@ const updateUserRole = (req, res) => {
   });
 };
 
+const checkDbStatus = (req, res) => {
+  const sql = "SELECT 1 as test";
+  db.query(sql, (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: "Database connection failed" });
+    }
+
+    res.json({ status: "Database is connected and queries are working" });
+  });
+};
+
 module.exports = {
   getUsersWithPlans,
   deleteUser,
   countUsers,
   getOnlineUsers,
   updateUserRole,
+  checkDbStatus,
 };

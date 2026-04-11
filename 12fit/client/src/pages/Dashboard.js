@@ -117,6 +117,11 @@ function Dashboard() {
         <p className="mb-1">Admin Access Features</p>
       </div>
 
+      <div className="text-center mb-5">
+        <h1 className="display-4 fw-bold text-white mb-3 admin-dashboard-title">Admin Dashboard</h1>
+        <p className="lead text-muted">Manage users, monitor system status, and control access</p>
+      </div>
+
       <div className="row g-4 mb-4">
         <div className="col-md-6">
           <div className="dashboard-stat-card p-4 h-100 text-center">
@@ -261,6 +266,12 @@ function Dashboard() {
           </div>
         )}
       </div>
+
+      <div className="text-center mt-5 mb-4">
+        <h2 className="display-5 fw-bold text-white admin-dashboard-title">Plans Dashboard</h2>
+        <p className="lead text-muted">Manage workout and diet plans</p>
+      </div>
+
     </div>
   );
 }

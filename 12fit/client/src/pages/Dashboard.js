@@ -165,6 +165,9 @@ function Dashboard() {
           minHeight: '600px',
         }}
       >
+        <div className="text-center mb-4">
+          <h3 className="text-white fw-bold">Users List</h3>
+        </div>
         <div className="d-flex justify-content-center mb-4">
           <input
             type="text"

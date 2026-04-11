@@ -169,48 +169,56 @@ function Dashboard() {
         <p className="lead text-muted">Manage users, monitor system status, and control access</p>
       </div>
 
-      <div className="row g-4 mb-4">
-        <div className="col-md-6">
-          <div className="dashboard-stat-card p-4 h-100 text-center">
-            <h6 className="text-uppercase text-muted mb-3">Registered Users</h6>
-            <p className="display-5 mb-2">{registeredCount}</p>
+      <div className="dashboard-panel-card p-4 mb-4">
+        <div className="dashboard-panel-card-header mb-4">
+          <div>
+            <h4 className="text-white mb-1">System Overview</h4>
           </div>
         </div>
-        <div className="col-md-6">
-          <div className="dashboard-stat-card p-4 h-100 text-center">
-            <h6 className="text-uppercase text-muted mb-3">Current Online Users</h6>
-            <p className="display-5 mb-2">{onlineCount}</p>
-          </div>
-        </div>
-      </div>
 
-      <div className="row g-4 mb-4">
-        <div className="col-md-4 text-center">
-          <button
-            type="button"
-            className="btn btn-primary rounded-pill px-4 py-3"
-            onClick={handleCheckApiStatus}
-          >
-            Check API Status
-          </button>
+        <div className="row g-4 mb-4">
+          <div className="col-md-6">
+            <div className="dashboard-stat-card p-4 h-100 text-center">
+              <h6 className="text-uppercase text-muted mb-3">Registered Users</h6>
+              <p className="display-5 mb-2">{registeredCount}</p>
+            </div>
+          </div>
+          <div className="col-md-6">
+            <div className="dashboard-stat-card p-4 h-100 text-center">
+              <h6 className="text-uppercase text-muted mb-3">Current Online Users</h6>
+              <p className="display-5 mb-2">{onlineCount}</p>
+            </div>
+          </div>
         </div>
-        <div className="col-md-4 text-center">
-          <button
-            type="button"
-            className="btn btn-primary rounded-pill px-4 py-3"
-            onClick={handleTestResponseTime}
-          >
-            System Health
-          </button>
-        </div>
-        <div className="col-md-4 text-center">
-          <button
-            type="button"
-            className="btn btn-primary rounded-pill px-4 py-3"
-            onClick={handleCheckDbStatus}
-          >
-            Check Database Status
-          </button>
+
+        <div className="row g-4">
+          <div className="col-md-4 d-flex justify-content-center">
+            <button
+              type="button"
+              className="btn btn-primary rounded-pill px-4 py-3"
+              onClick={handleCheckApiStatus}
+            >
+              Check API Status
+            </button>
+          </div>
+          <div className="col-md-4 d-flex justify-content-center">
+            <button
+              type="button"
+              className="btn btn-primary rounded-pill px-4 py-3"
+              onClick={handleTestResponseTime}
+            >
+              System Health
+            </button>
+          </div>
+          <div className="col-md-4 d-flex justify-content-center">
+            <button
+              type="button"
+              className="btn btn-primary rounded-pill px-4 py-3"
+              onClick={handleCheckDbStatus}
+            >
+              Check Database Status
+            </button>
+          </div>
         </div>
       </div>
 

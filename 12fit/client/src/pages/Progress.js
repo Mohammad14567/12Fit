@@ -399,33 +399,38 @@ function Progress() {
       <div className="row">
         <div className="col-12">
           <div className="progress-history-card">
-            <h3 className="text-white fw-bold mb-4">Progress History</h3>
+            <div className="progress-history-card-header">
+              <div>
+                <h3 className="text-white fw-bold mb-1">Progress History</h3>
+                <p className="text-muted small mb-0">Recent entries for your fitness progress</p>
+              </div>
+            </div>
             {progressList.length > 0 ? (
-              <div className="table-responsive">
-                <table className="table table-dark table-striped table-hover mb-0">
+              <div className="table-responsive progress-history-table-wrapper">
+                <table className="table progress-history-table mb-0">
                   <thead>
                     <tr>
                       <th>Date</th>
-                      <th>Weight (kg)</th>
-                      <th>Chest (cm)</th>
-                      <th>Waist (cm)</th>
-                      <th>Hips (cm)</th>
-                      <th>Arms (cm)</th>
-                      <th>Body Fat (%)</th>
+                      <th>Weight</th>
+                      <th>Chest</th>
+                      <th>Waist</th>
+                      <th>Hips</th>
+                      <th>Arms</th>
+                      <th>Body Fat</th>
                       <th>Notes</th>
                     </tr>
                   </thead>
                   <tbody>
                     {progressList.map((entry, index) => (
                       <tr key={index}>
-                        <td>{entry.day_name || entry.createdAt || entry.date || "Unknown"}</td>
+                        <td>{entry.day_name || entry.createdAt || entry.date || 'Unknown'}</td>
                         <td>{entry.weight} kg</td>
                         <td>{entry.chest || '-'}</td>
                         <td>{entry.waist || '-'}</td>
                         <td>{entry.hips || '-'}</td>
                         <td>{entry.arms || '-'}</td>
                         <td>{entry.bodyFat || '-'}</td>
-                        <td className="small">{entry.notes ? entry.notes.substring(0, 20) + '...' : '-'}</td>
+                        <td className="small">{entry.notes || '-'}</td>
                       </tr>
                     ))}
                   </tbody>

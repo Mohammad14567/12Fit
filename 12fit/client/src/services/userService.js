@@ -23,3 +23,7 @@ export const getRegisteredUsersCount = () => {
 export const getOnlineUsersCount = () => {
   return api.get("/users/online");
 };
+
+export const checkApiStatus = () => {
+  return api.get("/users/count");
+};

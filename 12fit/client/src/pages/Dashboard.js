@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
-import { getUsersWithPlans, deleteUser, getRegisteredUsersCount, getOnlineUsersCount } from "../services/userService";
+import { getUsersWithPlans, deleteUser, getRegisteredUsersCount, getOnlineUsersCount, checkApiStatus } from "../services/userService";
 
 function Dashboard() {
   const token = localStorage.getItem("token");
@@ -9,6 +9,8 @@ function Dashboard() {
   const [registeredCount, setRegisteredCount] = useState(0);
   const [onlineCount, setOnlineCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const [apiStatus, setApiStatus] = useState(null);
+  const [apiStatusType, setApiStatusType] = useState("");
   const socketRef = useRef(null);
 
   const cardsPerPage = 3;
@@ -40,6 +42,21 @@ function Dashboard() {
       console.log(error);
     }
   }, []);
+
+  const handleCheckApiStatus = async () => {
+    setApiStatus("Checking API status...");
+    setApiStatusType("info");
+
+    try {
+      await checkApiStatus();
+      setApiStatus("API is working: connection successful.");
+      setApiStatusType("success");
+    } catch (error) {
+      console.error(error);
+      setApiStatus("API is not working: unable to connect.");
+      setApiStatusType("danger");
+    }
+  };
 
   useEffect(() => {
     setCurrentPage(1);
@@ -90,6 +107,23 @@ function Dashboard() {
         </div>
       </div>
 
+      <div className="mb-4">
+        <button
+          type="button"
+          className="btn btn-primary rounded-pill px-4 py-3"
+          onClick={handleCheckApiStatus}
+        >
+          Check API Status
+        </button>
+      </div>
+
+      {apiStatus && (
+        <div className={`alert alert-${apiStatusType} rounded-4 py-3 mb-4`} role="alert">
+          {apiStatus}
+        </div>
+      )}
+
+      <h3 className="mb-4">Control Users Accounts</h3>
       <div
         style={{
           background: 'rgba(255, 255, 255, 0.05)',

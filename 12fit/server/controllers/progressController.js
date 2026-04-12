@@ -1,8 +1,7 @@
 const db = require("../config/db");
 
 const getProgress = (req, res) => {
-  const userId = req.user.id;
-
+  
   const sql = "SELECT day_name, weight FROM progress WHERE user_id = ? ORDER BY id ASC";
   db.query(sql, [userId], (err, results) => {
     if (err) {
@@ -14,7 +13,7 @@ const getProgress = (req, res) => {
 };
 
 const addProgress = (req, res) => {
-  const userId = req.user.id;
+  const userId = 1;
   const { day_name, weight } = req.body;
 
   if (!day_name || !weight) {

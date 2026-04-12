@@ -1,11 +1,23 @@
-const generateWorkoutPlan = (goal, level) => {
-  if (goal === "lose weight") {
-    if (level === "beginner") {
+const generateWorkoutPlan = ({ age, weight, height, activity, goal, diet }) => {
+  if (goal === "Lose Weight") {
+    if (
+      activity === "Sedentary" ||
+      activity === "Sedentary (little to no exercise)"
+    ) {
       return [
         "Jumping Jacks - 20 reps",
         "Bodyweight Squats - 15 reps",
         "Walking - 20 min",
         "Plank - 20 sec",
+      ];
+    }
+
+    if (activity === "Moderate") {
+      return [
+        "Brisk Walking - 25 min",
+        "Lunges - 15 reps",
+        "Mountain Climbers - 20 sec",
+        "Plank - 30 sec",
       ];
     }
 
@@ -17,13 +29,25 @@ const generateWorkoutPlan = (goal, level) => {
     ];
   }
 
-  if (goal === "muscle gain") {
-    if (level === "beginner") {
+  if (goal === "Gain Muscle") {
+    if (
+      activity === "Sedentary" ||
+      activity === "Sedentary (little to no exercise)"
+    ) {
       return [
         "Push-ups - 10 reps",
         "Bodyweight Squats - 15 reps",
         "Plank - 30 sec",
-        "Pull-ups Assisted - 5 reps",
+        "Glute Bridges - 12 reps",
+      ];
+    }
+
+    if (activity === "Moderate") {
+      return [
+        "Push-ups - 15 reps",
+        "Dumbbell Squats - 12 reps",
+        "Shoulder Press - 10 reps",
+        "Plank - 40 sec",
       ];
     }
 
@@ -50,14 +74,49 @@ const getWorkouts = (req, res) => {
 };
 
 const createWorkout = (req, res) => {
-  const { goal, level } = req.body;
+  const { age, weight, height, activity, goal, diet } = req.body;
 
-  const workoutPlan = generateWorkoutPlan(goal, level);
+  const workoutPlan = generateWorkoutPlan({
+    age,
+    weight,
+    height,
+    activity,
+    goal,
+    diet,
+  });
 
   res.json({
     message: "Workout plan generated successfully",
+    age,
+    weight,
+    height,
+    activity,
     goal,
-    level,
+    diet,
+    workoutPlan,
+  });
+};
+
+const generateWorkout = (req, res) => {
+  const { age, weight, height, activity, goal, diet } = req.body;
+
+  const workoutPlan = generateWorkoutPlan({
+    age,
+    weight,
+    height,
+    activity,
+    goal,
+    diet,
+  });
+
+  res.json({
+    message: "Workout plan generated successfully",
+    age,
+    weight,
+    height,
+    activity,
+    goal,
+    diet,
     workoutPlan,
   });
 };
@@ -65,4 +124,5 @@ const createWorkout = (req, res) => {
 module.exports = {
   getWorkouts,
   createWorkout,
+  generateWorkout,
 };

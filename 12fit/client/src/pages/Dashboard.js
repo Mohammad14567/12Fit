@@ -87,15 +87,12 @@ function Dashboard() {
     const startTime = Date.now();
 
     try {
-      // Test API response time
       await checkApiStatus();
       const apiResponseTime = Date.now() - startTime;
 
-      // Get uptime
       const uptimeRes = await getUptime();
       const uptime = uptimeRes.data.uptime;
 
-      // Get DB ping
       const dbPingRes = await getDbPing();
       const dbPingTime = dbPingRes.data.dbPingTime;
 

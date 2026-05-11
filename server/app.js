@@ -17,32 +17,22 @@ const app = express();
 
 connectDB();
 
-const allowedOrigins = [
-  "http://localhost:3000",
-  "https://12-fit.vercel.app",
-  process.env.CLIENT_URL,
-].filter(Boolean);
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (!origin) {
-      return callback(null, true);
-    }
-
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    }
-
-    return callback(null, false);
-  },
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  optionsSuccessStatus: 204,
-};
-
-app.use(cors(corsOptions));
-app.options("*", cors(corsOptions));
+app.options(
+  "*",
+  cors({
+    origin: true,
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 
@@ -53,8 +43,6 @@ app.get("/", (req, res) => {
 app.get("/cors-test", (req, res) => {
   res.json({
     message: "CORS is working",
-    origin: req.headers.origin || null,
-    allowedOrigins,
   });
 });
 
@@ -69,9 +57,8 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: allowedOrigins,
+    origin: true,
     credentials: true,
-    methods: ["GET", "POST"],
   },
 });
 

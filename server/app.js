@@ -43,7 +43,13 @@ app.get("/", (req, res) => {
 app.get("/cors-test", (req, res) => {
   res.json({
     message: "CORS is working",
+    origin: req.headers.origin || null,
   });
+});
+
+app.use((req, res, next) => {
+  console.log("REQUEST:", req.method, req.url, req.headers.origin);
+  next();
 });
 
 app.use("/auth", authRoutes);
@@ -52,6 +58,14 @@ app.use("/diet", dietRoutes);
 app.use("/products", productRoutes);
 app.use("/progress", progressRoutes);
 app.use("/users", userRoutes);
+
+app.use((err, req, res, next) => {
+  console.error("SERVER ERROR:", err);
+
+  res.status(500).json({
+    message: err.message || "Server error",
+  });
+});
 
 const server = http.createServer(app);
 

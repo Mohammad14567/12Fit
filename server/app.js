@@ -22,7 +22,7 @@ const app = express();
 app.use(cors({
     origin: [
       "http://localhost:3000",
-      "https://fit12-pro.netlify.app",
+      "https://12-fit.vercel.app",
     ],
     credentials: true,
   })
@@ -46,7 +46,7 @@ const io = new Server(server, {
   cors: {
     origin: [
       "http://localhost:3000",
-      "https://fit12-pro.netlify.app",
+      "https://12-fit.vercel.app",
     ],
     methods: ["GET", "POST"],
     credentials: true,

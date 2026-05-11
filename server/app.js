@@ -17,19 +17,33 @@ const app = express();
 
 connectDB();
 
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+
+  const allowedOrigins = [
+    "http://localhost:3000",
+    "https://12-fit.vercel.app",
+  ];
+
+  if (origin && allowedOrigins.includes(origin)) {
+    res.header("Access-Control-Allow-Origin", origin);
+  }
+
+  res.header("Vary", "Origin");
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.header("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(204);
+  }
+
+  next();
+});
+
 app.use(
   cors({
-    origin: true,
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
-
-app.options(
-  "*",
-  cors({
-    origin: true,
+    origin: ["http://localhost:3000", "https://12-fit.vercel.app"],
     credentials: true,
   })
 );
@@ -41,15 +55,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/cors-test", (req, res) => {
-  res.json({
-    message: "CORS is working",
-    origin: req.headers.origin || null,
-  });
-});
-
-app.use((req, res, next) => {
-  console.log("REQUEST:", req.method, req.url, req.headers.origin);
-  next();
+  res.json({ message: "CORS is working" });
 });
 
 app.use("/auth", authRoutes);
@@ -61,38 +67,30 @@ app.use("/users", userRoutes);
 
 app.use((err, req, res, next) => {
   console.error("SERVER ERROR:", err);
-
-  res.status(500).json({
-    message: err.message || "Server error",
-  });
+  res.status(500).json({ message: err.message || "Server error" });
 });
 
 const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: true,
+    origin: ["http://localhost:3000", "https://12-fit.vercel.app"],
     credentials: true,
   },
 });
 
 let onlineUsers = 0;
-
 app.set("onlineUsers", onlineUsers);
 
 io.on("connection", (socket) => {
   onlineUsers += 1;
-
   app.set("onlineUsers", onlineUsers);
-
   io.emit("onlineUsers", onlineUsers);
   io.emit("online-users-count", onlineUsers);
 
   socket.on("disconnect", () => {
     onlineUsers = Math.max(0, onlineUsers - 1);
-
     app.set("onlineUsers", onlineUsers);
-
     io.emit("onlineUsers", onlineUsers);
     io.emit("online-users-count", onlineUsers);
   });

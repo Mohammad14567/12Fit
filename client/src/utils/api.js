@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || "https://fit12-pro-production.up.railway.app",
+  baseURL: process.env.REACT_APP_API_URL || "https://one2fit.onrender.com",
 });
 
 api.interceptors.request.use(

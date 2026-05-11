@@ -1,13 +1,17 @@
 import api from "../utils/api";
 
-export const getProducts = () => {
-  return api.get("/products");
+export const getProducts = (search = "") => {
+  return api.get(`/products?search=${search}`);
 };
 
-export const createProduct = (data, token) => {
-  return api.post("/products", data, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+export const createProduct = (data) => {
+  return api.post("/products", data);
+};
+
+export const updateProduct = (id, data) => {
+  return api.put(`/products/${id}`, data);
+};
+
+export const deleteProduct = (id) => {
+  return api.delete(`/products/${id}`);
 };

@@ -1,33 +1,188 @@
-const db = require("../config/db");
+const Product = require("../models/Product");
+const cloudinary = require("../config/cloudinary");
 
-const getProducts = (req, res) => {
-  db.query("SELECT * FROM products", (err, results) => {
-    if (err) {
-      return res.status(500).json({ message: "Database error" });
-    }
+const uploadImageToCloudinary = (fileBuffer) => {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      {
+        folder: "12fit/products",
+      },
+      (error, result) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(result);
+        }
+      }
+    );
 
-    res.json(results);
+    stream.end(fileBuffer);
   });
 };
 
-const createProduct = (req, res) => {
-  const { name, price, category } = req.body;
+const getProducts = async (req, res) => {
+  try {
+    const search = req.query.search || "";
 
-  if (!name || !price || !category) {
-    return res.status(400).json({ message: "All fields are required" });
+    const products = await Product.find({
+      name: { $regex: search, $options: "i" },
+    }).sort({ createdAt: -1 });
+
+    res.json(products);
+  } catch (error) {
+    console.log("Get products error:", error.message);
+    res.status(500).json({ message: "Database error" });
   }
+};
 
-  const sql = "INSERT INTO products (name, price, category) VALUES (?, ?, ?)";
-  db.query(sql, [name, price, category], (err, result) => {
-    if (err) {
-      return res.status(500).json({ message: "Insert error" });
+const createProduct = async (req, res) => {
+  try {
+    const {
+      name,
+      price,
+      shortDesc,
+      category,
+      description,
+      usageTips,
+      benefits,
+    } = req.body;
+
+    if (!name || !price) {
+      return res.status(400).json({
+        message: "Name and price are required",
+      });
     }
 
-    res.status(201).json({ message: "Product created successfully" });
-  });
+    let imageUrl = "";
+
+    if (req.file) {
+      const uploadedImage = await uploadImageToCloudinary(req.file.buffer);
+      imageUrl = uploadedImage.secure_url;
+    }
+
+    let benefitsArray = [];
+
+    if (Array.isArray(benefits)) {
+      benefitsArray = benefits;
+    } else if (typeof benefits === "string") {
+      benefitsArray = benefits
+        .split(",")
+        .map((item) => item.trim())
+        .filter((item) => item !== "");
+    }
+
+    const product = await Product.create({
+      name,
+      price,
+      image: imageUrl,
+      shortDesc,
+      category,
+      description,
+      usageTips,
+      benefits: benefitsArray,
+    });
+
+    res.status(201).json({
+      message: "Product created successfully",
+      product,
+    });
+  } catch (error) {
+    console.log("Create product error:", error.message);
+    res.status(500).json({ message: "Insert error" });
+  }
+};
+
+const updateProduct = async (req, res) => {
+  try {
+    const {
+      name,
+      price,
+      shortDesc,
+      category,
+      description,
+      usageTips,
+      benefits,
+    } = req.body;
+
+    if (!name || !price) {
+      return res.status(400).json({
+        message: "Name and price are required",
+      });
+    }
+
+    const oldProduct = await Product.findById(req.params.id);
+
+    if (!oldProduct) {
+      return res.status(404).json({
+        message: "Product not found",
+      });
+    }
+
+    let imageUrl = oldProduct.image;
+
+    if (req.file) {
+      const uploadedImage = await uploadImageToCloudinary(req.file.buffer);
+      imageUrl = uploadedImage.secure_url;
+    }
+
+    let benefitsArray = [];
+
+    if (Array.isArray(benefits)) {
+      benefitsArray = benefits;
+    } else if (typeof benefits === "string") {
+      benefitsArray = benefits
+        .split(",")
+        .map((item) => item.trim())
+        .filter((item) => item !== "");
+    }
+
+    const product = await Product.findByIdAndUpdate(
+      req.params.id,
+      {
+        name,
+        price,
+        image: imageUrl,
+        shortDesc,
+        category,
+        description,
+        usageTips,
+        benefits: benefitsArray,
+      },
+      { new: true }
+    );
+
+    res.json({
+      message: "Product updated successfully",
+      product,
+    });
+  } catch (error) {
+    console.log("Update product error:", error.message);
+    res.status(500).json({ message: "Update error" });
+  }
+};
+
+const deleteProduct = async (req, res) => {
+  try {
+    const product = await Product.findByIdAndDelete(req.params.id);
+
+    if (!product) {
+      return res.status(404).json({
+        message: "Product not found",
+      });
+    }
+
+    res.json({
+      message: "Product deleted successfully",
+    });
+  } catch (error) {
+    console.log("Delete product error:", error.message);
+    res.status(500).json({ message: "Delete error" });
+  }
 };
 
 module.exports = {
   getProducts,
   createProduct,
+  updateProduct,
+  deleteProduct,
 };

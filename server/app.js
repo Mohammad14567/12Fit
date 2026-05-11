@@ -4,6 +4,9 @@ require("dotenv").config();
 
 require("./config/db");
 
+const connectMongoDB = require("./config/mongoDb");
+connectMongoDB();
+
 const http = require("http");
 const { Server } = require("socket.io");
 
@@ -16,17 +19,17 @@ const userRoutes = require("./routes/userRoutes");
 
 const app = express();
 
-
-
-
-app.use(cors({
+app.use(
+  cors({
     origin: [
       "http://localhost:3000",
+      "http://localhost:3001",
       "https://fit12-pro.netlify.app",
     ],
     credentials: true,
   })
 );
+
 app.use(express.json());
 
 app.get("/", (req, res) => {
@@ -41,11 +44,14 @@ app.use("/progress", progressRoutes);
 app.use("/users", userRoutes);
 
 const PORT = process.env.PORT || 8080;
+
 const server = http.createServer(app);
+
 const io = new Server(server, {
   cors: {
     origin: [
       "http://localhost:3000",
+      "http://localhost:3001",
       "https://fit12-pro.netlify.app",
     ],
     methods: ["GET", "POST"],
@@ -68,6 +74,6 @@ io.on("connection", (socket) => {
   });
 });
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

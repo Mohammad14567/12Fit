@@ -20,19 +20,25 @@ connectDB();
 const allowedOrigins = [
   "http://localhost:3000",
   "https://12-fit.vercel.app",
-];
+  process.env.CLIENT_URL,
+].filter(Boolean);
 
 const corsOptions = {
   origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
+    if (!origin) {
       return callback(null, true);
     }
 
-    return callback(new Error("Not allowed by CORS"));
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    return callback(null, false);
   },
   credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
+  optionsSuccessStatus: 204,
 };
 
 app.use(cors(corsOptions));
@@ -42,6 +48,14 @@ app.use(express.json());
 
 app.get("/", (req, res) => {
   res.send("12Fit API is running");
+});
+
+app.get("/cors-test", (req, res) => {
+  res.json({
+    message: "CORS is working",
+    origin: req.headers.origin || null,
+    allowedOrigins,
+  });
 });
 
 app.use("/auth", authRoutes);
@@ -54,7 +68,11 @@ app.use("/users", userRoutes);
 const server = http.createServer(app);
 
 const io = new Server(server, {
-  cors: corsOptions,
+  cors: {
+    origin: allowedOrigins,
+    credentials: true,
+    methods: ["GET", "POST"],
+  },
 });
 
 let onlineUsers = 0;

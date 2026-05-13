@@ -10,6 +10,7 @@ const authRoutes = require("./routes/authRoutes");
 const workoutRoutes = require("./routes/workoutRoutes");
 const dietRoutes = require("./routes/dietRoutes");
 const productRoutes = require("./routes/productRoutes");
+const orderRoutes = require("./routes/orderRoutes");
 const progressRoutes = require("./routes/progressRoutes");
 const userRoutes = require("./routes/userRoutes");
 
@@ -33,6 +34,7 @@ app.use("/auth", authRoutes);
 app.use("/workouts", workoutRoutes);
 app.use("/diet", dietRoutes);
 app.use("/products", productRoutes);
+app.use("/orders", orderRoutes);
 app.use("/progress", progressRoutes);
 app.use("/users", userRoutes);
 

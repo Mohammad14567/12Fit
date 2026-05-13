@@ -34,6 +34,7 @@ function Dashboard() {
   const [roleUpdateTarget, setRoleUpdateTarget] = useState(null);
   const [roleUpdateStatus, setRoleUpdateStatus] = useState(null);
   const [roleUpdating, setRoleUpdating] = useState(false);
+  const [orderNotification, setOrderNotification] = useState(null);
 
   const [products, setProducts] = useState([]);
   const [productSearch, setProductSearch] = useState("");
@@ -140,6 +141,18 @@ function Dashboard() {
       }
     };
   }, [productImagePreview]);
+
+  useEffect(() => {
+    if (!orderNotification) {
+      return undefined;
+    }
+
+    const timeout = setTimeout(() => {
+      setOrderNotification(null);
+    }, 4000);
+
+    return () => clearTimeout(timeout);
+  }, [orderNotification]);
 
   const handleCheckApiStatus = async () => {
     setApiStatus("Checking API status...");
@@ -350,6 +363,13 @@ function Dashboard() {
     }
   };
 
+  const handleDeliverOrder = (orderId, customerName) => {
+    setOrders((previousOrders) =>
+      previousOrders.filter((order) => order._id !== orderId)
+    );
+    setOrderNotification(`تم تسليم الطلب بنجاح للعميل ${customerName || ""}`.trim());
+  };
+
   const filteredUsers = users.filter((user) => {
     const query = searchTerm.toLowerCase();
     return (
@@ -374,6 +394,13 @@ function Dashboard() {
 
   return (
     <div className="container py-5">
+      {orderNotification && (
+        <div className="alert alert-success rounded-4 py-3 mb-4" role="alert">
+          <strong className="me-2">Notification:</strong>
+          {orderNotification}
+        </div>
+      )}
+
       <div className="dashboard-welcome-card p-4 mb-4">
         <h2 className="mb-2">Welcome, {username}</h2>
         <p className="mb-1">Admin Access Features</p>
@@ -684,6 +711,18 @@ function Dashboard() {
                           <div className="text-info">{item.price}</div>
                         </div>
                       ))}
+                    </div>
+
+                    <div className="mt-3 d-flex justify-content-end">
+                      <button
+                        type="button"
+                        className="btn btn-success btn-sm rounded-pill px-3"
+                        onClick={() =>
+                          handleDeliverOrder(order._id, order.customerName)
+                        }
+                      >
+                        تسليم الطلب
+                      </button>
                     </div>
                   </div>
                 ))

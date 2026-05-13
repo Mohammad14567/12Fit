@@ -5,6 +5,7 @@ const { Server } = require("socket.io");
 require("dotenv").config();
 
 const connectDB = require("./config/db");
+const ensureTestAdmin = require("./utils/seedAdmin");
 
 const authRoutes = require("./routes/authRoutes");
 const workoutRoutes = require("./routes/workoutRoutes");
@@ -73,4 +74,8 @@ const PORT = process.env.PORT || 8080;
 
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+
+  ensureTestAdmin().catch((error) => {
+    console.error("Failed to seed test admin:", error.message);
+  });
 });

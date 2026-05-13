@@ -1,11 +1,13 @@
 const db = require("../config/db");
 
 const getProgress = (req, res) => {
-  const userId = req.user.id;
+  const userId = req.user?.id || 1;
 
   const sql = "SELECT day_name, weight FROM progress WHERE user_id = ? ORDER BY id ASC";
+
   db.query(sql, [userId], (err, results) => {
     if (err) {
+      console.error("getProgress error:", err);
       return res.status(500).json({ message: "Database error" });
     }
 
@@ -14,7 +16,7 @@ const getProgress = (req, res) => {
 };
 
 const addProgress = (req, res) => {
-  const userId = req.user.id;
+  const userId = req.user?.id || 1;
   const { day_name, weight } = req.body;
 
   if (!day_name || !weight) {
@@ -22,8 +24,10 @@ const addProgress = (req, res) => {
   }
 
   const sql = "INSERT INTO progress (user_id, day_name, weight) VALUES (?, ?, ?)";
+
   db.query(sql, [userId, day_name, weight], (err, result) => {
     if (err) {
+      console.error("addProgress error:", err);
       return res.status(500).json({ message: "Insert error" });
     }
 

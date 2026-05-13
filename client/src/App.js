@@ -7,11 +7,9 @@ import Dashboard from "./pages/Dashboard";
 import Workout from "./pages/Workout";
 import Diet from "./pages/Diet";
 import Products from "./pages/Products";
-import Progress from "./pages/Progress";
 
 import PublicOnlyRoute from "./components/PublicOnlyRoute";
 import ProtectedRoute from "./components/ProtectedRoute";
-import AdminRoute from "./components/AdminRoute";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 function App() {
@@ -24,69 +22,12 @@ function App() {
         <div className="main-content">
           <Routes>
             <Route path="/" element={<Home />} />
-
-            <Route
-              path="/login"
-              element={
-                <PublicOnlyRoute>
-                  <Login />
-                </PublicOnlyRoute>
-              }
-            />
-
-            <Route
-              path="/register"
-              element={
-                <PublicOnlyRoute>
-                  <Register />
-                </PublicOnlyRoute>
-              }
-            />
-
-            <Route
-              path="/dashboard"
-              element={
-                <AdminRoute>
-                  <Dashboard />
-                </AdminRoute>
-              }
-            />
-
-            <Route
-              path="/workout"
-              element={
-                <ProtectedRoute>
-                  <Workout />
-                </ProtectedRoute>
-              }
-            />
-
-            <Route
-              path="/diet"
-              element={
-                <ProtectedRoute>
-                  <Diet />
-                </ProtectedRoute>
-              }
-            />
-
-            <Route
-              path="/products"
-              element={
-                <ProtectedRoute>
-                  <Products />
-                </ProtectedRoute>
-              }
-            />
-
-            <Route
-              path="/Progress"
-              element={
-                <ProtectedRoute>
-                  <Progress />
-                </ProtectedRoute>
-              }
-            />
+            <Route path="/login"element={<Login />}/>
+            <Route path="/register"element={<Register />}/>
+            <Route path="/dashboard"element={<Dashboard />}/>
+            <Route path="/workout"element={<Workout /> }/>
+            <Route path="/diet"element={ <Diet />}/>
+            <Route path="/products"element={<Products /> }/>
           </Routes>
         </div>
 

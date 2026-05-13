@@ -123,85 +123,6 @@ a {
   border: none;
 }
 
-.dashboard-welcome-card {
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  background-size: 200% 200%;
-  border-radius: 24px;
-  box-shadow: var(--shadow-main);
-  animation: dashboardGradient 8s ease infinite;
-  color: white;
-}
-
-.dashboard-welcome-card small {
-  color: rgba(255, 255, 255, 0.9);
-}
-
-.dashboard-stat-card {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 24px;
-  box-shadow: var(--shadow-main);
-  min-height: 170px;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.dashboard-panel-card {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 30px;
-  box-shadow: var(--shadow-main);
-}
-
-.dashboard-panel-card-header {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  gap: 1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-  padding-bottom: 22px;
-}
-
-.dashboard-search-input {
-  width: 100%;
-  max-width: 420px;
-  padding: 12px 20px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.24);
-  background: rgba(255, 255, 255, 0.10);
-  color: white;
-  outline: none;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
-  text-align: center;
-  font-size: 14px;
-}
-
-.dashboard-search-input::placeholder {
-  color: rgba(255, 255, 255, 0.75);
-  text-align: center;
-}
-
-.dashboard-search-input:focus {
-  background: rgba(255, 255, 255, 0.16);
-  border-color: rgba(255, 255, 255, 0.50);
-  box-shadow: 0 0 0 0.18rem rgba(108, 99, 255, 0.16);
-}
-
-@keyframes dashboardGradient {
-  0%, 100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
-
 /* Theme toggle */
 .theme-icon-btn {
   border: none;
@@ -223,103 +144,6 @@ a {
   box-shadow: var(--shadow-main);
   border-radius: 24px !important;
   color: var(--text-main);
-}
-
-.progress-history-card {
-  padding: 0;
-  overflow: hidden;
-}
-
-.progress-history-card-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 22px 28px;
-  background: linear-gradient(135deg, rgba(108, 99, 255, 0.95), rgba(0, 212, 255, 0.85));
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-}
-
-.progress-history-card-header h3 {
-  margin: 0;
-}
-
-.table-header-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.icon-button {
-  width: 38px;
-  height: 38px;
-  border: none;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.16);
-  color: white;
-  cursor: pointer;
-  font-size: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.2s ease, transform 0.2s ease;
-}
-
-.icon-button:hover {
-  background: rgba(255, 255, 255, 0.24);
-  transform: translateY(-1px);
-}
-
-.progress-history-table-wrapper {
-  overflow: hidden;
-  border-radius: 0 0 24px 24px;
-  border: none;
-  background: transparent;
-  backdrop-filter: blur(18px);
-}
-
-.progress-history-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.progress-history-table thead th {
-  background: var(--primary);
-  color: rgba(226, 232, 240, 0.9);
-  border: none;
-  padding: 16px 20px;
-  text-align: left;
-  font-weight: 700;
-}
-
-.progress-history-table tbody tr {
-  background: black;
-  transition: transform 0.2s ease, background 0.2s ease;
-}
-
-.progress-history-table tbody tr:not(:last-child) {
-  border-bottom: none;
-}
-
-.progress-history-table tbody tr:hover {
-  background: rgba(255, 255, 255, 0.12);
-}
-
-.progress-history-table td {
-  border: none;
-  padding: 16px 20px;
-  vertical-align: middle;
-  color: rgba(148, 163, 184, 0.95);
-  font-size: 16px;
-}
-
-.progress-history-table td.small {
-  color: rgba(148, 163, 184, 0.95);
-}
-
-.progress-history-table tbody tr td:first-child {
-  color: rgba(226, 232, 240, 0.95);
-  font-weight: 600;
 }
 
 .feature-card {
@@ -458,29 +282,6 @@ small {
   color: #fecaca;
 }
 
-.progress-input,
-.progress-textarea {
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  color: #fff;
-  padding: 0.85rem 1rem;
-  min-height: 44px;
-  box-shadow: inset 0 1px 8px rgba(0, 0, 0, 0.12);
-}
-
-.progress-input::placeholder,
-.progress-textarea::placeholder {
-  color: rgba(255, 255, 255, 0.85);
-  opacity: 1;
-}
-
-.progress-textarea {
-  min-height: 100px;
-}
-
-
-
 /* Footer */
 .footer-section {
   background: rgba(8,17,32,0.8);
@@ -553,16 +354,4 @@ small {
   .hero-image {
     height: 230px;
   }
-}
-
-
-/* Admin Dashboard Title Hover */
-.admin-dashboard-title {
-  transition: transform 0.3s ease, color 0.3s ease;
-  cursor: default;
-}
-
-.admin-dashboard-title:hover {
-  transform: scale(1.05);
-  color: var(--secondary) !important;
 }

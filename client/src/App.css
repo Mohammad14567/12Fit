@@ -27,7 +27,10 @@
 .App-link {
   color: #61dafb;
 }
-
+.card textarea::placeholder {
+  color: #6c757d !important;
+  opacity: 1;
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

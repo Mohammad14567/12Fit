@@ -27,7 +27,13 @@ function Register() {
       await registerUser({ name, email, password });
       navigate("/login");
     } catch (error) {
-      setErrorMessage(error.response?.data?.message || "Something went wrong");
+      console.error("Register Error:", error.response?.data || error.message);
+      setErrorMessage(
+        error.response?.data?.error ||
+          error.response?.data?.message ||
+          error.message ||
+          "Something went wrong"
+      );
     }
   };
 

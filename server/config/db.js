@@ -1,23 +1,23 @@
-const mysql = require("mysql2");
+const mongoose = require("mongoose");
 require("dotenv").config();
 
-const db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT || 3306,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  ssl: {
-    rejectUnauthorized: false,
-  },
-});
+mongoose.set("bufferCommands", false);
 
-db.connect((err) => {
-  if (err) {
-    console.log("Database connection failed:", err.message);
-  } else {
-    console.log("MySQL connected");
+const connectDB = async () => {
+  try {
+    if (!process.env.MONGO_URI) {
+      throw new Error("MONGO_URI is missing in .env");
+    }
+
+    await mongoose.connect(process.env.MONGO_URI, {
+      serverSelectionTimeoutMS: 10000,
+    });
+
+    console.log("MongoDB connected");
+  } catch (error) {
+    console.error("MongoDB connection failed:", error.message);
+    process.exit(1);
   }
-});
+};
 
-module.exports = db;
+module.exports = connectDB;

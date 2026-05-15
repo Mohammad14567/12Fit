@@ -6,7 +6,7 @@ import {
   getRegisteredUsersCount,
   getOnlineUsersCount,
   checkApiStatus,
-  updateUserRole,.
+  updateUserRole,
   checkDbStatus,
   getUptime,
   getDbPing,

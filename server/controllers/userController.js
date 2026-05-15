@@ -2,9 +2,11 @@ const mongoose = require("mongoose");
 const User = require("../models/User");
 const Workout = require("../models/Workout");
 const Progress = require("../models/Progress");
+const { isValidRole } = require("../utils/validators");
 
 const getUsersWithPlans = async (req, res) => {
   try {
+
     const users = await User.find().select("name email role").sort({ createdAt: -1 });
 
     const usersWithPlans = await Promise.all(
@@ -35,6 +37,24 @@ const deleteUser = async (req, res) => {
   try {
     const userId = req.params.id;
 
+    if (req.user.role !== "super_admin") {
+      return res.status(403).json({
+        message: "Only super admin can delete users",
+      });
+    }
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (user.role === "super_admin") {
+      return res.status(403).json({
+        message: "Cannot delete super admin",
+      });
+    }
+
     await User.findByIdAndDelete(userId);
     await Workout.deleteMany({ user: userId });
     await Progress.deleteMany({ user: userId });
@@ -56,28 +76,63 @@ const getRegisteredUsersCount = async (req, res) => {
 
 const getOnlineUsersCount = async (req, res) => {
   const onlineUsers = req.app.get("onlineUsers");
-  const online = onlineUsers ? onlineUsers.size : 0;
+ 
+  const online =
+    typeof onlineUsers === "number"
+      ? onlineUsers
+      : onlineUsers?.size || 0;
+
   return res.json({ online });
 };
 
 const updateUserRole = async (req, res) => {
-  try {
-    const { role } = req.body;
+  const { id } = req.params;
+  const { role: newRole } = req.body;
 
-    const updatedUser = await User.findByIdAndUpdate(
-      req.params.id,
-      { role: role || "admin" },
-      { new: true }
-    ).select("-password");
+  try {
+    if (req.user.role !== "super_admin") {
+      return res.status(403).json({
+        message: "Only super admin can change roles",
+      });
+    }
+
+    if (req.user?.id === id) {
+      return res.status(400).json({
+        message: "You cannot change your own role",
+      });
+    }
+
+    const user = await User.findById(id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (user.role === "super_admin") {
+      return res.status(403).json({
+        message: "Cannot change super admin role",
+      });
+    }
+
+    if (newRole === "super_admin") {
+      return res.status(403).json({
+        message: "Cannot assign super admin role",
+      });
+    }
+
+    user.role = newRole;
+    await user.save();
 
     return res.json({
       message: "User role updated successfully",
-      user: updatedUser,
     });
   } catch (error) {
-    return res.status(500).json({ message: "Update error" });
+    console.error(error);
+    return res.status(500).json({
+      message: "Update error",
+    });
   }
-};
+}; 
 
 const checkApiStatus = async (req, res) => {
   return res.json({ status: "API is working" });

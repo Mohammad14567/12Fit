@@ -60,6 +60,7 @@ function Dashboard() {
   const cardsPerPage = 3;
 
   const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
+  const currentUser = storedUser;
   const username = storedUser.name || "Admin";
 
   const loadUsers = useCallback(async () => {
@@ -223,17 +224,20 @@ function Dashboard() {
     setRoleUpdateStatus("Updating role...");
 
     try {
-      await updateUserRole(userId, "admin");
-      setRoleUpdateStatus("User has been promoted to Admin.");
-      setRoleUpdateTarget(null);
-      loadUsers();
-    } catch (error) {
-      console.error(error);
-      setRoleUpdateStatus("Failed to update user role.");
-    } finally {
-      setRoleUpdating(false);
-    }
-  };
+        const user = users.find((u) => u.id === userId);
+      const newRole = user.role === "admin" ? "user" : "admin";
+
+          await updateUserRole(userId, newRole);
+      setRoleUpdateStatus("User role updated successfully.");
+        setRoleUpdateTarget(null);
+        loadUsers();
+      } catch (error) {
+        console.error(error);
+        setRoleUpdateStatus("Failed to update user role.");
+      } finally {
+        setRoleUpdating(false);
+      }
+    };
 
   const clearProductForm = () => {
     setEditingProductId(null);
@@ -893,44 +897,53 @@ function Dashboard() {
                   </div>
                 )}
 
-                <button
-                  className="btn btn-danger btn-sm"
-                  onClick={() => handleDelete(user.id)}
-                >
-                  Remove Account
-                </button>
-
-                <button
-                  className="btn btn-outline-light btn-sm ms-2"
-                  onClick={() => handleShowRoleOptions(user.id)}
-                >
-                  Update User Role
-                </button>
-
-                {roleUpdateTarget === user.id && (
-                  <div className="mt-3 p-3 bg-white bg-opacity-10 rounded-4">
-                    <p className="mb-2 text-muted small">Select new role:</p>
+                {currentUser.role === "admin" && user.role !== "super_admin" && (
+                  <>
                     <button
-                      className="btn btn-primary btn-sm"
-                      onClick={() => handleUpdateUserRole(user.id)}
-                      disabled={roleUpdating}
+                      className="btn btn-danger btn-sm"
+                      onClick={() => handleDelete(user.id)}
                     >
-                      {roleUpdating ? "Updating..." : "Admin"}
+                      Remove Account
                     </button>
 
-                    {roleUpdateStatus && (
-                      <div
-                        className={`alert alert-${
-                          roleUpdateStatus.includes("Failed")
-                            ? "danger"
-                            : "success"
-                        } rounded-4 mt-3 py-2 mb-0`}
-                        role="alert"
-                      >
-                        {roleUpdateStatus}
+                    <button
+                      className="btn btn-outline-light btn-sm ms-2"
+                      onClick={() => handleShowRoleOptions(user.id)}
+                    >
+                      Update User Role
+                    </button>
+
+                    {roleUpdateTarget === user.id && (
+                      <div className="mt-3 p-3 bg-white bg-opacity-10 rounded-4">
+                        <p className="mb-2 text-muted small">Select new role:</p>
+
+                        <button
+                          className="btn btn-primary btn-sm"
+                          onClick={() => handleUpdateUserRole(user.id)}
+                          disabled={roleUpdating}
+                        >
+                          {roleUpdating
+                            ? "Updating..."
+                            : user.role === "admin"
+                            ? "Make User"
+                            : "Make Admin"}
+                        </button>
+
+                        {roleUpdateStatus && (
+                          <div
+                            className={`alert alert-${
+                              roleUpdateStatus.includes("Failed")
+                                ? "danger"
+                                : "success"
+                            } rounded-4 mt-3 py-2 mb-0`}
+                            role="alert"
+                          >
+                            {roleUpdateStatus}
+                          </div>
+                        )}
                       </div>
                     )}
-                  </div>
+                  </>
                 )}
               </div>
             </div>
@@ -962,3 +975,9 @@ function Dashboard() {
 }
 
 export default Dashboard;
+
+
+
+
+
+

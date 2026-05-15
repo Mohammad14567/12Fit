@@ -1,53 +1,20 @@
-import api from "../utils/api";
+import api from "../api/api";
 
-export const getUsersWithPlans = (token) => {
-  return api.get("/users/with-plans", {
-    headers: {
-      Authorization: token ? `Bearer ${token}` : undefined,
-    },
-  });
-};
+export const getUsersWithPlans = () => api.get("/users/with-plans");
 
-export const deleteUser = (userId, token) => {
-  return api.delete(`/users/${userId}`, {
-    headers: {
-      Authorization: token ? `Bearer ${token}` : undefined,
-    },
-  });
-};
+export const deleteUser = (userId) => api.delete(`/users/${userId}`);
 
-export const updateUserRole = (userId, role, token) => {
-  return api.patch(
-    `/users/${userId}`,
-    { role },
-    {
-      headers: {
-        Authorization: token ? `Bearer ${token}` : undefined,
-      },
-    }
-  );
-};
+export const getRegisteredUsersCount = () => api.get("/users/count");
 
-export const getRegisteredUsersCount = () => {
-  return api.get("/users/count");
-};
+export const getOnlineUsersCount = () => api.get("/users/online-count");
 
-export const getOnlineUsersCount = () => {
-  return api.get("/users/online");
-};
+export const updateUserRole = (userId, role) =>
+  api.put(`/users/${userId}/role`, { role });
 
-export const checkApiStatus = () => {
-  return api.get("/users/count");
-};
+export const checkApiStatus = () => api.get("/users/api-status");
 
-export const checkDbStatus = () => {
-  return api.get("/users/db-status");
-};
+export const checkDbStatus = () => api.get("/users/db-status");
 
-export const getUptime = () => {
-  return api.get("/health/uptime");
-};
+export const getUptime = () => api.get("/users/uptime");
 
-export const getDbPing = () => {
-  return api.get("/health/db-ping");
-};
+export const getDbPing = () => api.get("/users/db-ping");

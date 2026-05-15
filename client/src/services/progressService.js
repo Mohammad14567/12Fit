@@ -1,17 +1,5 @@
-import api from "../utils/api";
+import api from "../api/api";
 
-export const getProgress = (token) => {
-  return api.get("/progress", {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-};
+export const getProgress = () => api.get("/progress");
 
-export const addProgress = (data, token) => {
-  return api.post("/progress", data, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-};
+export const addProgress = (progressData) => api.post("/progress", progressData);

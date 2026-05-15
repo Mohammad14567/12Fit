@@ -44,8 +44,8 @@ function Home() {
                     </Link>
                   </>
                 ) : (
-                  <Link to="/dashboard" className="btn btn-primary btn-lg px-4">
-                    Go to Dashboard
+                  <Link to="/workout" className="btn btn-primary btn-lg px-4">
+                    Start Your Journey
                   </Link>
                 )}
               </div>
@@ -74,7 +74,7 @@ function Home() {
             <div className="col-md-4">
               <div className="card feature-card h-100 border-0">
                 <div className="card-body p-4">
-                  <div className="feature-icon">💪</div>
+                  <div className="feature-icon">🏋️‍♂️</div>
                   <h4 className="mt-3 text-white">Workout Generator</h4>
                   <p className="text-muted">
                     Generate customized workout plans based on your goals and
@@ -87,7 +87,7 @@ function Home() {
             <div className="col-md-4">
               <div className="card feature-card h-100 border-0">
                 <div className="card-body p-4">
-                  <div className="feature-icon">🥗</div>
+                  <div className="feature-icon">🍽️</div>
                   <h4 className="mt-3 text-white">Diet Generator</h4>
                   <p className="text-muted">
                     Get healthy meal suggestions and nutrition plans designed
@@ -100,7 +100,7 @@ function Home() {
             <div className="col-md-4">
               <div className="card feature-card h-100 border-0">
                 <div className="card-body p-4">
-                  <div className="feature-icon">📊</div>
+                  <div className="feature-icon">📈</div>
                   <h4 className="mt-3 text-white">Track Progress</h4>
                   <p className="text-muted">
                     Follow your progress visually and stay motivated with a
@@ -126,8 +126,8 @@ function Home() {
               Create Account
             </Link>
           ) : (
-            <Link to="/dashboard" className="btn btn-light text-dark mt-3 px-4">
-              Open Dashboard
+            <Link to="/diet" className="btn btn-light text-dark mt-3 px-4">
+              Explore Plans
             </Link>
           )}
         </div>

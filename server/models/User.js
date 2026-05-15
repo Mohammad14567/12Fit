@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
-
+// User model stores authentication and role-related data
+// required to identify and authorize users across the system.
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -29,5 +30,6 @@ const userSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+// Export the User model for authentication and protected route access.
 
 module.exports = mongoose.model("User", userSchema);

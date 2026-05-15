@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+// Define the structure of a single meal inside the saved diet plan.
 
 const mealSchema = new mongoose.Schema(
   {
@@ -8,6 +9,7 @@ const mealSchema = new mongoose.Schema(
   },
   { _id: false }
 );
+// Define the structure of the calculated macronutrient values.
 
 const macrosSchema = new mongoose.Schema(
   {
@@ -17,7 +19,8 @@ const macrosSchema = new mongoose.Schema(
   },
   { _id: false }
 );
-
+// Diet model defines the full structure of the nutrition plan
+// stored for each authenticated user in MongoDB.
 const dietSchema = new mongoose.Schema(
   {
     user_id: {
@@ -58,5 +61,6 @@ const dietSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+// Reuse the existing model if it already exists to avoid recompilation errors.
 
 module.exports = mongoose.models.Diet || mongoose.model("Diet", dietSchema);

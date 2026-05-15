@@ -1,5 +1,6 @@
 const Joi = require("joi");
-
+// Validate incoming diet request data before processing it
+// to ensure required fields are present and correctly formatted.
 exports.generateDietSchema = Joi.object({
   name: Joi.string().min(3).max(100).required(),
 

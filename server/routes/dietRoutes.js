@@ -9,7 +9,8 @@ const {
   getDietPlans,
   createDietPlan,
 } = require("../controllers/dietController");
-
+// Diet routes handle generating, revising, saving,
+// and retrieving nutrition plans for authenticated users.
 router.post("/", authMiddleware, generateDiet);
 router.post("/ai-generate", authMiddleware, generateDietWithAI);
 router.post("/ai-revise", authMiddleware, reviseDietWithAI);

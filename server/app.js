@@ -3,6 +3,7 @@ const cors = require("cors");
 require("dotenv").config();
 
 const connectDB = require("./config/db");
+const errorMiddleware = require("./middleware/errorMiddleware");
 
 const authRoutes = require("./routes/authRoutes");
 const workoutRoutes = require("./routes/workoutRoutes");
@@ -24,6 +25,16 @@ app.use("/api/diet", dietRoutes);
 app.use("/api/workouts", workoutRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/progress", progressRoutes);
+
+// 404 handler
+app.use((req, res, next) => {
+  const error = new Error("Route not found");
+  error.status = 404;
+  next(error);
+});
+
+// Global error handler
+app.use(errorMiddleware);
 
 const PORT = process.env.PORT || 8080;
 

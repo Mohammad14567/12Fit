@@ -182,7 +182,7 @@ const createStructuredCompletion = async (prompt) => {
 
   let lastError;
 // Retry AI request if the first attempt fails,
-
+// then fall back safely if the service remains unavailable.
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
       const response = await ai.models.generateContent({

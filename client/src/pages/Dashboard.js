@@ -17,7 +17,8 @@ import {
   getProducts,
   updateProduct,
 } from "../services/productService";
-import { getOrders } from "../services/orderService";
+import { getOrders, deleteOrder } from "../services/orderService";
+
 
 function Dashboard() {
   const [users, setUsers] = useState([]);
@@ -104,6 +105,15 @@ function Dashboard() {
       console.log(error);
     }
   }, []);
+
+    const handleDeliverOrder = async (orderId) => {
+    try {
+      await deleteOrder(orderId);
+      setOrders((prev) => prev.filter((o) => o._id !== orderId));
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     loadUsers();
@@ -657,7 +667,7 @@ function Dashboard() {
               border: "1px solid rgba(34, 211, 238, 0.18)",
             }}
           >
-            <div className="dashboard-panel-card-header mb-4">
+              <div className="dashboard-panel-card-header mb-4">
               <div>
                 <h4 className="text-white mb-1">Recent Orders</h4>
                 <p className="text-white-50 mb-0">
@@ -712,18 +722,12 @@ function Dashboard() {
                         </div>
                       ))}
                     </div>
-
-                    <div className="mt-3 d-flex justify-content-end">
-                      <button
-                        type="button"
-                        className="btn btn-success btn-sm rounded-pill px-3"
-                        onClick={() =>
-                          handleDeliverOrder(order._id, order.customerName)
-                        }
-                      >
-                        تسليم الطلب
-                      </button>
-                    </div>
+                    <button
+                      className="btn btn-sm btn-success mt-3 w-100"
+                      onClick={() => handleDeliverOrder(order._id)}
+                    >
+                      تسليم الطلب
+                    </button>
                   </div>
                 ))
               )}
@@ -731,7 +735,6 @@ function Dashboard() {
           </div>
         </div>
       </div>
-
       <div
         className="dashboard-panel-card p-4 mb-4"
         style={{

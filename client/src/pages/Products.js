@@ -34,6 +34,7 @@ function Products() {
   const debounceRef = useRef(null);
   const messageTimerRef = useRef(null);
 
+  // Loads products from the backend and applies the search query.
   const loadProducts = useCallback(async (query) => {
     try {
       setLoading(true);
@@ -85,6 +86,7 @@ function Products() {
     messageTimerRef.current = setTimeout(() => setMessage(""), 2500);
   };
 
+  // Adds a product to the cart or increases its quantity if it already exists.
   const addToCart = (product) => {
     const existingProduct = cartItems.find((item) => item._id === product._id);
 
@@ -156,6 +158,7 @@ function Products() {
     });
   };
 
+  // Sends the checkout order to the backend and clears the cart after success.
   const submitOrder = async () => {
     if (cartItems.length === 0) {
       showMessage("Your cart is empty");

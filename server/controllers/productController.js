@@ -1,6 +1,8 @@
 const Product = require("../models/Product");
 const cloudinary = require("../config/cloudinary");
 
+// Uploads a product image to Cloudinary using the memory buffer from multer.
+// Returns the Cloudinary upload result, including the secure image URL.
 const uploadImageToCloudinary = (fileBuffer) => {
   return new Promise((resolve, reject) => {
     const stream = cloudinary.uploader.upload_stream(
@@ -15,11 +17,11 @@ const uploadImageToCloudinary = (fileBuffer) => {
         }
       }
     );
-
     stream.end(fileBuffer);
   });
 };
-
+// Gets all products from MongoDB.
+// If a search query is provided, products are filtered by product name.
 const getProducts = async (req, res) => {
   try {
     const search = req.query.search || "";
@@ -35,6 +37,9 @@ const getProducts = async (req, res) => {
   }
 };
 
+// Creates a new product.
+// If an image file is sent, it is uploaded to Cloudinary first.
+// Then the product data and image URL are stored in MongoDB.
 const createProduct = async (req, res) => {
   try {
     const {
@@ -88,10 +93,12 @@ const createProduct = async (req, res) => {
     });
   } catch (error) {
     console.log("Create product error:", error.message);
-    res.status(500).json({ message: "Insert error" });
+    res.status(500).json({ message: "Failed to create product" });
   }
 };
 
+// Updates an existing product by id.
+// If a new image is uploaded, the new Cloudinary URL replaces the old image URL.
 const updateProduct = async (req, res) => {
   try {
     const {
@@ -157,10 +164,11 @@ const updateProduct = async (req, res) => {
     });
   } catch (error) {
     console.log("Update product error:", error.message);
-    res.status(500).json({ message: "Update error" });
+    res.status(500).json({ message: "Failed to update product" });
   }
 };
 
+// Deletes a product from MongoDB by id.
 const deleteProduct = async (req, res) => {
   try {
     const product = await Product.findByIdAndDelete(req.params.id);
@@ -176,10 +184,9 @@ const deleteProduct = async (req, res) => {
     });
   } catch (error) {
     console.log("Delete product error:", error.message);
-    res.status(500).json({ message: "Delete error" });
+    res.status(500).json({ message: "Failed to delete product" });
   }
 };
-
 module.exports = {
   getProducts,
   createProduct,

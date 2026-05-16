@@ -1,5 +1,8 @@
 const Order = require("../models/Order");
 
+// Creates a new customer order and stores it in MongoDB.
+// The order contains customer information, cart items, payment method,
+// total price, and initial order status.
 const createOrder = async (req, res) => {
   try {
     const {
@@ -37,6 +40,8 @@ const createOrder = async (req, res) => {
 
     const io = req.app.get("io");
 
+    // Sends a real-time notification to admins when a new order is created.
+    // This works only if Socket.IO is available in the Express app.
     if (io) {
       io.emit("newOrder", order);
     }
@@ -54,6 +59,8 @@ const createOrder = async (req, res) => {
   }
 };
 
+// Gets all orders from MongoDB.
+// This endpoint is intended for admin use only.
 const getOrders = async (req, res) => {
   try {
     const orders = await Order.find().sort({ createdAt: -1 });
@@ -68,6 +75,8 @@ const getOrders = async (req, res) => {
   }
 };
 
+// Gets a specific order by id.
+// This helps the admin view the full details of one order.
 const getOrderById = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
@@ -88,6 +97,8 @@ const getOrderById = async (req, res) => {
   }
 };
 
+// Updates the status of an order.
+// Allowed statuses are Pending, Processing, Delivered, and Cancelled.
 const updateOrderStatus = async (req, res) => {
   try {
     const { status } = req.body;
@@ -125,6 +136,8 @@ const updateOrderStatus = async (req, res) => {
   }
 };
 
+// Deletes an order from MongoDB by id.
+// This should be used only for test, fake, or incorrect orders.
 const deleteOrder = async (req, res) => {
   try {
     const order = await Order.findByIdAndDelete(req.params.id);

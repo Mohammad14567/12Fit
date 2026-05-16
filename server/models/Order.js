@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+// Order schema defines the structure of order documents in MongoDB.
 const orderSchema = new mongoose.Schema(
   {
     customerName: {

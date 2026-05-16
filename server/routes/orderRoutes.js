@@ -12,8 +12,10 @@ const {
   deleteOrder,
 } = require("../controllers/orderController");
 
+// Public route , Users can create orders from checkout.
 router.post("/", createOrder);
 
+// Admin routes ,Only authenticated admins can view, update, or delete orders.
 router.get("/", authMiddleware, adminMiddleware, getOrders);
 
 router.get("/:id", authMiddleware, adminMiddleware, getOrderById);
